@@ -54,7 +54,7 @@ alexaApp.launch(function(request, response) {
   // }
 // );
  
- app.intent('AMAZON.CancelIntent', {
+ alexaApp.intent('AMAZON.CancelIntent', {
      "slots": {},
      "utterances": []
    }, function(request, response) {
