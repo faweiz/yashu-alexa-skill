@@ -105,10 +105,10 @@ alexaApp.intent('SelfIntent', {
 
 
 alexaApp.intent('HelloWorldIntent', {
-  "slots": { "AGE": "NUMBER" },
-  "utterances": ["hello"]
+  "slots": {},
+  "utterances": []
 }, function(req, res) {
-  res.say('Your age is hello ' + req.slot('AGE'));
+  res.say('Hello ' + req.slot('utterances'));
 });
 
 alexaApp.intent('ControlLightBulb', {
