@@ -54,14 +54,14 @@ alexaApp.launch(function(request, response) {
   // }
 // );
  
-// app.intent("AMAZON.CancelIntent", {
+ app.intent("AMAZON.CancelIntent", {
     // "slots": {},
     // "utterances": []
   // }, function(request, response) {
     // var cancelOutput = "No problem. Request cancelled. Goodbye!";
     // response.say(cancelOutput);
   // }
-// );
+ );
 
 
 
