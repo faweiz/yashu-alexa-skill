@@ -17,7 +17,7 @@
     "echo",
     "skills"
   ],
-  "author": "Puttaiah Arugunta",
+  "author": "Tony Zhang",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/puttareddy/yashu-alexa-skill/issues"
@@ -26,5 +26,8 @@
     "alexa-app": "^4.0.0",
     "ejs": "^2.5.6",
     "express": "^4.15.2"
+    "ask-sdk-core": "^2.6.0",
+    "ask-sdk-model": "^1.18.0",
+    "aws-sdk": "^2.326.0"
   }
 }
