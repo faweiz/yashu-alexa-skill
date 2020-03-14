@@ -1,120 +1,72 @@
-// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
-// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-// session persistence, api calls, and more.
-const Alexa = require('ask-sdk-core');
+var express = require("express");
+var alexa = require("alexa-app");
 
-const LaunchRequestHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-const HelloWorldIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'Hello World!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
-    }
-};
-const HelpIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'You can say hello to me! How can I help?';
+var PORT = process.env.PORT || 8080;
+var app = express();
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-const CancelAndStopIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
-    },
-    handle(handlerInput) {
-        const speakOutput = 'Goodbye!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
-    }
-};
-const SessionEndedRequestHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
-    },
-    handle(handlerInput) {
-        // Any cleanup logic goes here.
-        return handlerInput.responseBuilder.getResponse();
-    }
-};
+// ALWAYS setup the alexa app and attach it to express before anything else.
+var alexaApp = new alexa.app("test");
 
-// The intent reflector is used for interaction model testing and debugging.
-// It will simply repeat the intent the user said. You can create custom handlers
-// for your intents by defining them above, then also adding them to the request
-// handler chain below.
-const IntentReflectorHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest';
-    },
-    handle(handlerInput) {
-        const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-        const speakOutput = `You just triggered ${intentName}`;
+alexaApp.express({
+  expressApp: app,
+  //router: express.Router(),
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
-    }
-};
+  // verifies requests come from amazon alexa. Must be enabled for production.
+  // You can disable this if you're running a dev environment and want to POST
+  // things to test behavior. enabled by default.
+  checkCert: false,
 
-// Generic error handling to capture any syntax or routing errors. If you receive an error
-// stating the request handler chain is not found, you have not implemented a handler for
-// the intent being invoked or included it in the skill builder below.
-const ErrorHandler = {
-    canHandle() {
-        return true;
-    },
-    handle(handlerInput, error) {
-        console.log(`~~~~ Error handled: ${error.stack}`);
-        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+  // sets up a GET route when set to true. This is handy for testing in
+  // development, but not recommended for production. disabled by default
+  debug: true
+});
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
+// now POST calls to /test in express will be handled by the app.request() function
 
-// The SkillBuilder acts as the entry point for your skill, routing all request and response
-// payloads to the handlers above. Make sure any new handlers or interceptors you've
-// defined are included below. The order matters - they're processed top to bottom.
-exports.handler = Alexa.SkillBuilders.custom()
-    .addRequestHandlers(
-        LaunchRequestHandler,
-        HelloWorldIntentHandler,
-        HelpIntentHandler,
-        CancelAndStopIntentHandler,
-        SessionEndedRequestHandler,
-        IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
-    )
-    .addErrorHandlers(
-        ErrorHandler,
-    )
-    .lambda();
+// from here on you can setup any other express routes or middlewares as normal
+app.set("view engine", "ejs");
+
+alexaApp.launch(function(request, response) {
+  response.say("You launched the app!");
+});
+
+alexaApp.dictionary = { "names": ["matt", "joe", "bob", "bill", "mary", "jane", "dawn"] };
+
+alexaApp.intent('NameIntent', {
+  "slots": { "NAME": "LITERAL", "AGE": "NUMBER" },
+  "utterances": ["{My name is|my name's} {matt|bob|bill|jake|nancy|mary|jane|NAME} and I am {1-100|AGE}{ years old|}"]
+}, function(req, res) {
+  res.say('Your name is ' + req.slot('NAME') + ' and you are ' + req.slot('AGE') + ' years old');
+});
+
+alexaApp.intent('AgeIntent', {
+  "slots": { "AGE": "NUMBER" },
+  "utterances": ["My age is {1-100|AGE}"]
+}, function(req, res) {
+  res.say('Your age is ' + req.slot('AGE'));
+});
+
+alexaApp.intent('SelfIntent', {
+  "slots": { "NAME": "LITERAL" },
+  "utterances": ["Tell about {puttareddy|NAME}"]
+}, function(req, res) {
+  let name = req.data.request.intent.slots.NAME.value;
+  //console.log('name is -->', name)
+  let obj = '';
+  if (name === 'murali'){
+    obj +='Murali is Adolf Hitler for 235 Bloor East kids'
+  }else if(name === 'puttareddy'){
+    obj +='Puttareddy is creazy boy in 235 Bloor east'
+  }
+  res.say(obj);
+});
+
+
+alexaApp.intent('HelloWorldIntent', {
+  "slots": { "AGE": "NUMBER" },
+  "utterances": ["hello"]
+}, function(req, res) {
+  res.say('Your age is hello ' + req.slot('AGE'));
+});
+
+app.listen(PORT, () => console.log("Listening on port " + PORT + "."));
