@@ -33,35 +33,36 @@ alexaApp.launch(function(request, response) {
 
 
 
-app.intent("AMAZON.HelpIntent", {
-    "slots": {},
-    "utterances": []
-  },
-  function(request, response) {
-    var helpOutput = "You can say hello to me or ask 'some question'. You can also say stop or exit to quit.";
-    var reprompt = "What would you like to do?";
-    // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
-    response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
-  }
-);
+// app.intent("AMAZON.HelpIntent", {
+    // "slots": {},
+    // "utterances": []
+  // },
+  // function(request, response) {
+    // var helpOutput = "You can say hello to me or ask 'some question'. You can also say stop or exit to quit.";
+    // var reprompt = "What would you like to do?";
+    AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
+    // response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
+  // }
+// );
  
-app.intent("AMAZON.StopIntent", {
-    "slots": {},
-    "utterances": []
-  }, function(request, response) {
-    var stopOutput = "Don't You Worry. I'll be back.";
-    response.say(stopOutput);
-  }
-);
+// app.intent("AMAZON.StopIntent", {
+    // "slots": {},
+    // "utterances": []
+  // }, function(request, response) {
+    // var stopOutput = "Don't You Worry. I'll be back.";
+    // response.say(stopOutput);
+  // }
+// );
  
-app.intent("AMAZON.CancelIntent", {
-    "slots": {},
-    "utterances": []
-  }, function(request, response) {
-    var cancelOutput = "No problem. Request cancelled. Goodbye!";
-    response.say(cancelOutput);
-  }
-);
+// app.intent("AMAZON.CancelIntent", {
+    // "slots": {},
+    // "utterances": []
+  // }, function(request, response) {
+    // var cancelOutput = "No problem. Request cancelled. Goodbye!";
+    // response.say(cancelOutput);
+  // }
+// );
+
 
 
 
