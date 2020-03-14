@@ -69,4 +69,15 @@ alexaApp.intent('HelloWorldIntent', {
   res.say('Your age is hello ' + req.slot('AGE'));
 });
 
+alexaApp.intent('ControlLightBulb', {
+  "slots": { "name": "LightState",
+             "type": "LIGHT_STATE" },
+  "utterances": ["the light {LightState}",
+                 "{LightState} the light",
+                 "Turn the light {LightState}",
+                 "Turn {LightState} the light"]
+}, function(req, res) {
+  res.say('You just triggered ' + req.slot('LIGHT_STATE'));
+});
+
 app.listen(PORT, () => console.log("Listening on port " + PORT + "."));
