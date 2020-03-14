@@ -27,7 +27,7 @@ alexaApp.express({
 app.set("view engine", "ejs");
 
 alexaApp.launch(function(request, response) {
-  response.say("You launched the app!");
+  response.say("Welcome, You launched the app! you can say tony cindy turn on/off the light or Help. Which would you like to try?");
 });
 
 alexaApp.dictionary = { "names": ["matt", "joe", "bob", "bill", "mary", "jane", "dawn"] };
@@ -78,5 +78,10 @@ alexaApp.intent('ControlLightBulb', {
 }, function(req, res) {
   res.say('You just triggered the light to ' + req.slot('LightState'));
 });
+
+
+alexaApp.error = function(exception, request, response) {
+  response.say("Sorry, I had trouble listening what you asked. Please try again.");
+};
 
 app.listen(PORT, () => console.log("Listening on port " + PORT + "."));
