@@ -77,7 +77,7 @@ alexaApp.intent('ControlLightBulb', {
                  "Turn the light {LightState}",
                  "Turn {LightState} the light"]
 }, function(req, res) {
-  res.say('You just triggered ' + req.slot('LIGHT_STATE'));
+  res.say('You just triggered ' + req.slot('type'));
 });
 
 app.listen(PORT, () => console.log("Listening on port " + PORT + "."));
