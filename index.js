@@ -35,7 +35,7 @@ alexaApp.launch(function(request, response) {
 
  alexaApp.intent("AMAZON.HelpIntent", {
      "slots": {},
-     "utterances": []
+     "utterances": ["help", "help me"]
    },
    function(request, response) {
      var helpOutput = "You can say hello to me or ask 'some question'. You can also say stop or exit to quit.";
@@ -113,10 +113,7 @@ alexaApp.intent('HelloWorldIntent', {
 
 alexaApp.intent('ControlLightBulb', {
   "slots": {"LightState": "LIGHT_STATE"},
-  "utterances": ["the light {LightState}",
-                 "{LightState} the light",
-                 "Turn the light {LightState} {1-100|AGE}",
-                 "Turn {LightState} the light"]
+  "utterances": []
 }, function(req, res) {
   res.say('You just triggered the light to ' + req.slot('LightState'));
 });
