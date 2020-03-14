@@ -40,7 +40,7 @@ alexaApp.launch(function(request, response) {
   // function(request, response) {
     // var helpOutput = "You can say hello to me or ask 'some question'. You can also say stop or exit to quit.";
     // var reprompt = "What would you like to do?";
-    AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
+ //   AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
     // response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
   // }
 // );
